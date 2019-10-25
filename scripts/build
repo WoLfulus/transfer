@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+export GO111MODULE=on
+
+version="${TRANSFER_VERSION:-beta}"
+
+docker build -t wolfulus/transfer:${version} .
+
+# -ldflags "-X transfer.move.cli.Version=${version}"
+
+go build cmd/docker-transfer/main.go
