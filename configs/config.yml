@@ -1,4 +1,9 @@
 version: 0.1
+log:
+  accesslog:
+    disabled: true
+  level: info
+  formatter: text
 storage:
   filesystem:
   delete:
@@ -6,7 +11,7 @@ storage:
 auth:
   htpasswd:
     realm: Transfer
-    path: /etc/docker/registry/htpasswd
+    path: /data/auth/htpasswd
 notifications:
   endpoints:
     - name: notify

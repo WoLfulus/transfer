@@ -36,18 +36,17 @@ RUN CGO_ENABLED=0 make PREFIX=/go clean binaries && file ./bin/registry | grep "
 #
 # Dist
 #
-# FROM alpine
-#
-# # Additional files
-# COPY ./configs /etc/docker/registry
-#
-# # Registry executable
-# COPY --from=registry /go/src/github.com/docker/distribution/bin/registry /bin/registry
-#
-# # Default port
-# EXPOSE 5000
-#
-# # Entrypoint
-# ENTRYPOINT ["registry"]
-# CMD ["serve", "/etc/docker/registry/config.yml"]
-#
+FROM alpine
+
+# Additional files
+COPY ./configs /data
+
+# Registry executable
+COPY --from=registry /go/src/github.com/docker/distribution/bin/registry /bin/registry
+
+# Default port
+EXPOSE 5000
+
+# Entrypoint
+ENTRYPOINT ["registry"]
+CMD ["serve", "/data/config.yml"]
