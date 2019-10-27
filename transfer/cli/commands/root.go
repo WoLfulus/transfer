@@ -22,6 +22,7 @@ func rootCmd(name string) *cobra.Command {
 		buildInstall(),
 		buildStatus(),
 		buildVersion(),
+		buildUser(),
 	)
 	return cmd
 }

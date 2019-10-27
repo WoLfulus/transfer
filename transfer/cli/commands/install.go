@@ -49,8 +49,6 @@ func runInstall(options installOptions) error {
 		return err
 	}
 
-	service.Debug("options: %+v", options)
-
 	if svc.Status == service.StatusUnknown {
 		service.Error("Service status could not be determined. Aborting.")
 		os.Exit(1)
