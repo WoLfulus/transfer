@@ -11,6 +11,14 @@ import (
 	"github.com/wolfulus/transfer/transfer/version"
 )
 
+var (
+	// ErrServiceNotFound when service could not be found
+	ErrServiceNotFound = errors.New("service not found")
+
+	// ErrMultipleServicesRunning when multiple services are running
+	ErrMultipleServicesRunning = errors.New("multiple services running")
+)
+
 // Service represents a service running service instance
 type Service struct {
 	Container types.Container
@@ -44,10 +52,10 @@ func Get() (Service, error) {
 
 	if len(containers) == 0 {
 		service.Status = StatusNotFound
-		return service, errors.New("Service not found")
+		return service, ErrServiceNotFound
 	} else if len(containers) > 1 {
 		service.Status = StatusMultiple
-		return service, errors.New("Multiple containers running")
+		return service, ErrMultipleServicesRunning
 	}
 
 	container := containers[0]

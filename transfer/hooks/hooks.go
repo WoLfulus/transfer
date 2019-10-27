@@ -2,8 +2,10 @@ package hooks
 
 import (
 	"fmt"
+	"math/rand"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/docker/distribution/notifications"
 	"github.com/foomo/htpasswd"
@@ -17,17 +19,24 @@ func init() {
 }
 
 func setupPasswords() {
-	username := os.Getenv("REGISTRY_USERNAME")
-	if username == "" {
-		log.Fatal("Missing required environment variable: REGISTRY_USERNAME")
+	htpasswdPath := os.Getenv("HTPASSWD_PATH")
+	if htpasswdPath == "" {
+		htpasswdPath = "/data/auth/htpasswd"
 	}
 
-	password := os.Getenv("REGISTRY_PASSWORD")
+	username := os.Getenv("MANAGEMENT_USERNAME")
 	if username == "" {
-		log.Fatal("Missing required environment variable: REGISTRY_PASSWORD")
+		username = "transfer"
 	}
 
-	err := htpasswd.SetPassword("/data/auth/htpasswd", username, password, htpasswd.HashBCrypt)
+	password := os.Getenv("MANAGEMENT_PASSWORD")
+	if password == "" {
+		log.Errorln("MANAGEMENT_PASSWORD is not set. A random password will be used.")
+		src := rand.NewSource(time.Now().UnixNano())
+		password = string(1000000000 + src.Int63()%8000000000)
+	}
+
+	err := htpasswd.SetPassword(htpasswdPath, username, password, htpasswd.HashBCrypt)
 	if err != nil {
 		log.Fatal(err)
 	}
