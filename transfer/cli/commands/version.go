@@ -1,24 +1,34 @@
 package commands
 
 import (
-    "fmt"
-
-    "github.com/wolfulus/transfer/transfer/version"
+	"github.com/wolfulus/transfer/transfer/service"
+	"github.com/wolfulus/transfer/transfer/version"
 
 	"github.com/spf13/cobra"
 )
 
-func init() {
-    rootCmd.AddCommand(versionCmd)
+type versionOptions struct {
 }
 
-func versionRun(cmd *cobra.Command, args []string) {
-    fmt.Printf("Transfer Version: %s\n", version.Version)
+func buildVersion() *cobra.Command {
+
+	options := versionOptions{}
+
+	cmd := &cobra.Command{
+		Use:   "version",
+		Short: "Show the transfer plugin version",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return runVersion(options)
+		},
+	}
+
+	//flags := cmd.Flags()
+	//flags.StringVar(&options.variable, "name", "default", "Some variable")
+
+	return cmd
 }
 
-var versionCmd = &cobra.Command{
-    Use:   "version",
-    Short: "Print the version information of transfer plugin",
-    Long:  "Print the version information of transfer plugin",
-    Run:   versionRun,
+func runVersion(options versionOptions) error {
+	service.Log("Transfer version: %s", version.Version)
+	return nil
 }

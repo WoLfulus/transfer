@@ -2,34 +2,51 @@ package cli
 
 import (
 	"fmt"
-    "os"
-    "encoding/json"
-    "github.com/wolfulus/transfer/transfer/version"
-    "github.com/wolfulus/transfer/transfer/cli/commands"
+	"os"
+
+	"github.com/wolfulus/transfer/transfer/cli/commands"
+	"github.com/wolfulus/transfer/transfer/version"
+
+	"github.com/docker/cli/cli-plugins/manager"
+	"github.com/docker/cli/cli-plugins/plugin"
+	"github.com/docker/cli/cli/command"
+	cliflags "github.com/docker/cli/cli/flags"
+	"github.com/spf13/cobra"
 )
 
 // Execute the command line application
 func Execute() {
-    if (len(os.Args) >= 2 && os.Args[1] == "docker-cli-plugin-metadata") {
-        metadata, err := json.Marshal(Metadata{
-            SchemaVersion: "0.1.0",
-            Vendor: "WoLfulus.com",
-            Version: version.Version,
-            Experimental: false,
-        })
 
-        if err != nil {
-            fmt.Println("Error printing plugin metadata")
-            os.Exit(1)
-        }
+	isPlugin := false
+	if os.Getenv("DOCKER_CLI_PLUGIN_ORIGINAL_CLI_COMMAND") != "" {
+		isPlugin = true
+	} else if len(os.Args) >= 2 && os.Args[1] == manager.MetadataSubcommandName {
+		isPlugin = true
+	}
 
-        fmt.Println(string(metadata))
-        os.Exit(0)
-    }
+	if isPlugin {
+		plugin.Run(func(dockerCli command.Cli) *cobra.Command {
+			return commands.NewPlugin(dockerCli)
+		}, manager.Metadata{
+			SchemaVersion: "0.1.0",
+			Vendor:        "WoLfulus",
+			Version:       version.Version,
+			//Experimental:  os.Getenv("TRANSFER_EXPERIMENTAL") != "",
+		})
+		return
+	}
 
-    if err := commands.Execute(); err != nil {
-        os.Exit(1)
-    }
+	dockerCli, err := command.NewDockerCli()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 
-    os.Exit(0)
+	dockerCli.Initialize(cliflags.NewClientOptions())
+	cmd := commands.NewStandalone(dockerCli)
+	if err := cmd.Execute(); err != nil {
+		os.Exit(1)
+	}
+
+	os.Exit(0)
 }

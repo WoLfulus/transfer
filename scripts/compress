@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+set -ex
+upx dist/transfer*/*transfer*.exe

@@ -1,0 +1,44 @@
+project_name: transfer
+snapshot:
+  name_template: "{{.Env.TRANSFER_VERSION}}"
+env:
+  - GO111MODULE=on
+before:
+  hooks:
+    - go mod tidy
+builds:
+  - main: cmd/transfer/main.go
+    binary: docker-transfer
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X github.com/transfer/transfer/version.Version={{.Env.TRANSFER_VERSION}}
+    goos:
+      - linux
+      - windows
+      #- darwin
+    goarch:
+      - amd64
+    hooks:
+      post: ./scripts/compress
+checksum:
+  name_template: "checksums.txt"
+  algorithm: sha256
+archives:
+  - id: release
+    format: zip
+    format_overrides:
+      - goos: linux
+        format: tar.gz
+      - goos: darwin
+        format: tar.gz
+    name_template: "{{ .Binary }}-{{ .Os }}-{{ .Arch }}"
+    files:
+      - licence*
+      - LICENCE*
+      - license*
+      - LICENSE*
+      - readme*
+      - README*
+      - changelog*
+      - CHANGELOG*

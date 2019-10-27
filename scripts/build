@@ -1,11 +1,25 @@
 #!/usr/bin/env bash
 
+set -e
+
 export GO111MODULE=on
 
-version="${TRANSFER_VERSION:-beta}"
+version="${TRANSFER_VERSION:-latest}"
 
-docker build -t wolfulus/transfer:${version} .
+# Module update
+go mod tidy
 
-# -ldflags "-X transfer.move.cli.Version=${version}"
+# Build all cli versions
+docker build -t wolfulus/transfer:${version}-builder --build-arg TRANSFER_VERSION=${version} -f ./docker/builder/Dockerfile .
 
-go build cmd/docker-transfer/main.go
+# Build CLI image
+docker build -t wolfulus/transfer:${version}-cli --build-arg TRANSFER_VERSION=${version} -f ./docker/transfer/Dockerfile .
+
+# Copy artifacts to local folder
+docker create --name transfer-temp-$$ wolfulus/transfer:${version}-builder
+rm -rf ./dist/
+docker cp transfer-temp-$$:/transfer/dist/ ./
+docker container rm transfer-temp-$$
+
+# Build the service
+docker build -t wolfulus/transfer:${version} --build-arg TRANSFER_VERSION=${version} -f ./docker/registry/Dockerfile .
