@@ -43,16 +43,6 @@ func Push(image string, server string) error {
 		client.ImageRemove(context, remoteImage, types.ImageRemoveOptions{})
 	})()
 
-	/*
-		closer, err := client.ImagePush(context, remoteImage, types.ImagePushOptions{
-			All:          true,
-			RegistryAuth: "{}",
-		})
-		if err != nil {
-			return err
-		}
-	*/
 	cmd := cliImage.NewPushCommand(cli)
-
 	return cmd.RunE(cmd, []string{remoteImage})
 }

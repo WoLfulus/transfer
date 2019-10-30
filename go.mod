@@ -53,6 +53,7 @@ require (
 	github.com/jinzhu/gorm v1.9.11 // indirect
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
 	github.com/lib/pq v1.2.0 // indirect
+	github.com/mattn/go-shellwords v1.0.6 // indirect
 	github.com/miekg/pkcs11 v1.0.3 // indirect
 	github.com/moby/buildkit v0.6.2 // indirect
 	github.com/morikuni/aec v1.0.0 // indirect
@@ -61,6 +62,7 @@ require (
 	github.com/spf13/cobra v0.0.5
 	github.com/theupdateframework/notary v0.6.1 // indirect
 	github.com/tonistiigi/fsutil v0.0.0-20191018213012-0f039a052ca1 // indirect
+	github.com/xeipuuv/gojsonschema v1.2.0 // indirect
 	github.com/xlab/handysort v0.0.0-20150421192137-fb3537ed64a1 // indirect
 	github.com/zmap/zcrypto v0.0.0-20191023172918-f1f7c0342eee // indirect
 	github.com/zmap/zlint v1.0.2 // indirect

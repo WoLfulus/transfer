@@ -10,12 +10,10 @@ import (
 )
 
 type installOptions struct {
-	port     int
-	address  string
-	username string
-	password string
-	env      []string
-	force    bool
+	port    int
+	address string
+	env     []string
+	force   bool
 }
 
 func buildInstall() *cobra.Command {
@@ -34,8 +32,6 @@ func buildInstall() *cobra.Command {
 
 	flags.IntVar(&options.port, "port", -1, "If set, exposes the service on the specified port")
 	flags.StringVar(&options.address, "address", "0.0.0.0", "Address to bind the port if exposed")
-	flags.StringVar(&options.username, "username", "", "The system username (used for internal push/pull)")
-	flags.StringVar(&options.password, "password", "", "The system password (used for internal push/pull)")
 	flags.StringArrayVar(&options.env, "env", []string{}, "Environment variables to put in the service container")
 
 	flags.BoolVar(&options.force, "force", false, "Forces the installation")
@@ -78,15 +74,7 @@ func runInstall(options installOptions) error {
 		svc.Uninstall()
 	}
 
-	if options.username == "" {
-		options.username = "transfer"
-	}
-
-	if options.password == "" {
-		options.password = generatePassword(16)
-	}
-
-	err = service.Install(options.username, options.password, options.port, options.address, options.env)
+	err = service.Install(options.port, options.address, options.env)
 	if err != nil {
 		service.Error("Service installation failed: %s", err)
 		os.Exit(1)

@@ -1,7 +1,9 @@
 package commands
 
 import (
+	"github.com/foomo/htpasswd"
 	"github.com/spf13/cobra"
+	"github.com/wolfulus/transfer/transfer/config"
 	"github.com/wolfulus/transfer/transfer/service"
 )
 
@@ -29,24 +31,33 @@ func buildUserUpdate() *cobra.Command {
 	var options userUpdateOptions
 
 	cmd := &cobra.Command{
-		Use:   "update",
+		Use:   "update <username> <password>",
 		Short: "Updates or inserts a user",
+		Args:  cobra.MinimumNArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			options.username = args[0]
+			options.password = args[1]
 			return runUserUpdate(options)
 		},
 	}
-
-	flags := cmd.Flags()
-	flags.StringVar(&options.username, "username", "", "The target username")
-	flags.StringVar(&options.password, "password", "", "The new user's password ")
-
-	cmd.MarkFlagRequired("username")
 
 	return cmd
 }
 
 func runUserUpdate(options userUpdateOptions) error {
-	//
-	service.Log("Update user %s to use password %s", options.username, options.password)
-	return nil
+	svc, err := service.Get()
+	if err != nil {
+		return err
+	}
+
+	if config.IsService() {
+		err := htpasswd.SetPassword(config.GetPasswordsFile(), options.username, options.password, htpasswd.HashBCrypt)
+		if err != nil {
+			return err
+		}
+		service.Log("User updated")
+		return nil
+	}
+
+	return svc.Execute("/bin/transfer", "user", "update", options.username, options.password)
 }

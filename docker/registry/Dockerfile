@@ -51,7 +51,8 @@ RUN CGO_ENABLED=0 make PREFIX=/go clean binaries && file ./bin/registry | grep "
 FROM alpine
 
 # Authentication
-ENV HTPASSWD_LOCATION=/data/auth/htpasswd
+ENV TRANSFER_HTPASSWD_PATH=/data/auth/htpasswd
+ENV TRANSFER_SERVICE=1
 
 # Additional files
 COPY ./configs /data

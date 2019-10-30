@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"fmt"
 	"strconv"
 
 	"github.com/wolfulus/transfer/transfer/version"
@@ -13,12 +12,18 @@ import (
 )
 
 // Install the service into the host machine
-func Install(username string, password string, port int, address string, env []string) error {
+func Install(port int, address string, env []string) error {
 
 	client := cli.Client()
 	background := context.Background()
 
-	hostConfig := container.HostConfig{}
+	hostConfig := container.HostConfig{
+		VolumeDriver: "bind",
+		Binds:        []string{"/var/run/docker.sock:/var/run/docker.sock"},
+		RestartPolicy: container.RestartPolicy{
+			Name: "unless-stopped",
+		},
+	}
 
 	if port > 0 {
 		hostBinding := nat.PortBinding{
@@ -38,10 +43,7 @@ func Install(username string, password string, port int, address string, env []s
 			LabelVersion: version.Version,
 			LabelManaged: "yes",
 		},
-		Env: append([]string{
-			fmt.Sprintf("MANAGEMENT_USERNAME=%s", username),
-			fmt.Sprintf("MANAGEMENT_PASSWORD=%s", password),
-		}, env...),
+		Env: env,
 	}
 
 	cont, err := client.ContainerCreate(background, &config, &hostConfig, nil, "")
