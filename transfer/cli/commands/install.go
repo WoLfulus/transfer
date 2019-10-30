@@ -91,7 +91,7 @@ func runInstall(options installOptions) error {
 		service.Error("Service installation failed: %s", err)
 		os.Exit(1)
 	} else {
-		service.Log("Tranasfer service installed")
+		service.Log("Transfer service installed")
 	}
 
 	return err

@@ -3,6 +3,9 @@ package version
 import "fmt"
 
 var (
+	// Plugin name
+	Plugin = "transfer"
+
 	// Image name
 	Image = "wolfulus/transfer"
 
