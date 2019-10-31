@@ -1,12 +1,12 @@
-ARG TRANSFER_VERSION=latest
-
 #
 # Builder
 #
 FROM golang:1.13-alpine
 
 ENV GO111MODULE=on
-ENV TRANSFER_VERSION=${TRANSFER_VERSION:-latest}
+
+ARG TRANSFER_VERSION=latest
+ENV TRANSFER_VERSION=${TRANSFER_VERSION}
 
 # Prerequisites
 WORKDIR /transfer
@@ -19,4 +19,4 @@ RUN go mod download
 
 # Build
 COPY . .
-RUN ./bin/goreleaser --snapshot --rm-dist
+RUN ./bin/goreleaser --rm-dist --skip-publish --skip-sign --skip-validate

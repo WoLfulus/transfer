@@ -11,8 +11,7 @@ builds:
     binary: docker-transfer
     env:
       - CGO_ENABLED=0
-    ldflags:
-      - -s -w -X github.com/transfer/transfer/version.Version={{.Env.TRANSFER_VERSION}}
+    ldflags: -s -w -X github.com/wolfulus/transfer/transfer/version.Version={{.Env.TRANSFER_VERSION}}
     goos:
       - linux
       - windows
@@ -21,6 +20,8 @@ builds:
       - amd64
     hooks:
       post: ./scripts/compress
+release:
+  disable: true
 checksum:
   name_template: "checksums.txt"
   algorithm: sha256
@@ -32,7 +33,7 @@ archives:
         format: tar.gz
       - goos: darwin
         format: tar.gz
-    name_template: "{{ .Binary }}-{{ .Os }}-{{ .Arch }}"
+    name_template: "{{ .Binary }}-{{.Env.TRANSFER_VERSION}}-{{ .Os }}-{{ .Arch }}"
     files:
       - licence*
       - LICENCE*
