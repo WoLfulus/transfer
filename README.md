@@ -1,12 +1,12 @@
 # Docker Transfer
 
-![Transfer](.github/images/demo.gif)
-
-![Transfer](.github/images/demo2.gif)
-
 ## What is it?
 
 Transfer is a docker CLI plugin that enables pushing images directly to a remote docker host, skipping the process of pushing to an intermediate registry.
+
+![Transfer](.github/images/demo.gif)
+
+![Transfer](.github/images/demo2.gif)
 
 ## Why?
 
@@ -26,7 +26,7 @@ And the image is now available on your remote host.
 
 ## How it works?
 
-Transfer contains two components: a service (preconfigured registry server) and a CLI. The service enables you to push images lavaraging layer caching and all the good stuff registry has, and CLI adds some commands to your docker client to push images and manage the service instance.
+Transfer contains two components: a service (preconfigured registry server) and a CLI. The service enables you to push images with layer caching and all the good stuff registry has, and CLI adds some commands to your docker client to push images and manage the service instance.
 
 ### Registry
 
