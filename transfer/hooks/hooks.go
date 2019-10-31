@@ -44,8 +44,6 @@ func setupPasswords() {
 		managementPassword = strconv.Itoa(1000000000 + int(src.Int63())%8000000000)
 	}
 
-	log.Errorln("management credentials are: ", managementUsername, " and ", managementPassword)
-
 	err := htpasswd.SetPassword(htpasswdPath, managementUsername, managementPassword, htpasswd.HashBCrypt)
 	if err != nil {
 		log.Fatal(err)

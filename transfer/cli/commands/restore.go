@@ -40,7 +40,7 @@ func buildRestore() *cobra.Command {
 func runRestore(options restoreOptions) error {
 	err := service.Authenticate(options.registry, options.username, options.password)
 	if err != nil {
-		service.Error("failed to store auth information for %s with (%s, %s)", options.registry, options.username, options.password)
+		service.Error("failed to store auth information for %s", options.registry)
 	}
 
 	err = service.Restore(options.registryImage, options.localImage)
