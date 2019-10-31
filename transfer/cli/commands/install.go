@@ -30,7 +30,7 @@ func buildInstall() *cobra.Command {
 
 	flags := cmd.Flags()
 
-	flags.IntVar(&options.port, "port", -1, "If set, exposes the service on the specified port")
+	flags.IntVar(&options.port, "port", 5000, "If set, exposes the service on the specified port")
 	flags.StringVar(&options.address, "address", "0.0.0.0", "Address to bind the port if exposed")
 	flags.StringArrayVar(&options.env, "env", []string{}, "Environment variables to put in the service container")
 

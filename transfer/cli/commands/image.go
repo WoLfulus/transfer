@@ -9,6 +9,7 @@ import (
 type imageOptions struct {
 	image  string
 	target string
+	as     string
 }
 
 func buildImage() *cobra.Command {
@@ -26,15 +27,21 @@ func buildImage() *cobra.Command {
 		},
 	}
 
-	//flags := cmd.Flags()
-	//flags.StringVar(&options.variable, "name", "default", "Some variable")
+	flags := cmd.Flags()
+	flags.StringVar(&options.as, "as", "", "Rename image on target machine")
 
 	return cmd
 }
 
 func runImage(options imageOptions) error {
+	image := options.image
+	alias := options.image
+	if options.as != "" {
+		alias = options.as
+	}
+
 	server := config.GetServerFromAlias(options.target)
-	err := service.Push(options.image, server)
+	err := service.Push(image, alias, server)
 	if err != nil {
 		service.Error("Failed to push image '%s' to '%s'", options.image, server)
 		return err

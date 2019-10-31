@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 
 	"github.com/wolfulus/transfer/transfer/version"
@@ -25,17 +26,17 @@ func Install(port int, address string, env []string) error {
 		},
 	}
 
-	if port > 0 {
-		hostBinding := nat.PortBinding{
-			HostIP:   address,
-			HostPort: strconv.Itoa(port),
-		}
-		containerPort, err := nat.NewPort("tcp", "5000")
-		if err != nil {
-			return nil
-		}
-		hostConfig.PortBindings = nat.PortMap{containerPort: []nat.PortBinding{hostBinding}}
+	hostBinding := nat.PortBinding{
+		HostIP:   address,
+		HostPort: strconv.Itoa(port),
 	}
+	containerPort, err := nat.NewPort("tcp", "5000")
+	if err != nil {
+		return nil
+	}
+	hostConfig.PortBindings = nat.PortMap{containerPort: []nat.PortBinding{hostBinding}}
+
+	env = append(env, fmt.Sprintf("TRANSFER_SERVICE_PORT=%d", port))
 
 	config := container.Config{
 		Image: version.FQDN,

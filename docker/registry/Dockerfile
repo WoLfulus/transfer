@@ -36,7 +36,8 @@ RUN sed -i "s~GO_LDFLAGS=-ldflags '-s -w ~GO_LDFLAGS=-ldflags '-s -w -X \$(PKG)/
 
 # Additional dependencies
 RUN go get github.com/foomo/htpasswd && \
-    go get github.com/gin-gonic/gin
+    go get github.com/gin-gonic/gin && \
+    go get github.com/eknkc/basex
 
 # Copy our files
 COPY . .

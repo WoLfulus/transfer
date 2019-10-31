@@ -1,4 +1,5 @@
 dist/
+docker/
+docker-compose.yml
 *.exe
 *.bat
-docker-compose.yml

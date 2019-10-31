@@ -15,7 +15,7 @@ type pushOptions struct {
 }
 
 // Push a image to a repository
-func Push(image string, server string) error {
+func Push(image string, alias string, server string) error {
 	client := cli.Client()
 	context := context.Background()
 
@@ -26,7 +26,7 @@ func Push(image string, server string) error {
 	}
 
 	// Generate the target tag with original name encoded
-	tag, err := tags.Encode(image)
+	tag, err := tags.Encode(alias)
 	if err != nil {
 		return err
 	}
@@ -40,7 +40,9 @@ func Push(image string, server string) error {
 
 	// Make sure we remove it later
 	defer (func() {
-		client.ImageRemove(context, remoteImage, types.ImageRemoveOptions{})
+		client.ImageRemove(context, remoteImage, types.ImageRemoveOptions{
+			Force: true,
+		})
 	})()
 
 	cmd := cliImage.NewPushCommand(cli)
