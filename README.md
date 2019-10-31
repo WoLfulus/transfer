@@ -2,7 +2,7 @@
 
 ![Transfer](.github/images/demo.gif)
 
-<center><i>transfer plugin</i></center>
+![Transfer](.github/images/demo2.gif)
 
 ## What is it?
 
