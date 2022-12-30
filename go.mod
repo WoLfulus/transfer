@@ -42,7 +42,7 @@ require (
 	github.com/docker/libtrust v0.0.0-20160708172513-aabc10ec26b7 // indirect
 	github.com/eknkc/basex v1.0.0
 	github.com/foomo/htpasswd v0.0.0-20180422071726-cb63c4ac0e50
-	github.com/gin-gonic/gin v1.4.0
+	github.com/gin-gonic/gin v1.7.0
 	github.com/gofrs/uuid v3.2.0+incompatible // indirect
 	github.com/gogo/googleapis v1.3.0 // indirect
 	github.com/google/certificate-transparency-go v1.0.21 // indirect
